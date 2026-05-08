@@ -309,3 +309,62 @@ body {
 #sendBtn:hover {
   background: #555;
 }
+/* === 長押しフォルダ移動メニュー === */
+.move-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  gap: 0;
+}
+
+.move-menu-title {
+  background: #fff;
+  padding: 14px 40px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+  min-width: 220px;
+}
+
+.move-menu-btn {
+  background: #fff;
+  border: none;
+  border-top: 1px solid #eee;
+  padding: 12px 40px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  min-width: 220px;
+  text-align: center;
+}
+
+.move-menu-btn.active {
+  color: #aaa;
+}
+
+.move-menu-btn:hover {
+  background: #f5f5f5;
+}
+
+.move-menu-cancel {
+  background: #fff;
+  border: none;
+  border-top: 1px solid #eee;
+  padding: 12px 40px;
+  font-size: 13px;
+  color: #999;
+  cursor: pointer;
+  border-radius: 0 0 12px 12px;
+  min-width: 220px;
+  text-align: center;
+}
