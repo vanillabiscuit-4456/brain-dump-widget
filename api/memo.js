@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     if (req.method === "OPTIONS") return res.status(200).end();
@@ -17,6 +17,13 @@ export default async function handler(req, res) {
       });
     }
 
+    const HEADERS = {
+      Authorization: "Bearer " + NOTION_API_KEY,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json",
+    };
+
+    // GET: メモ一覧を取得
     if (req.method === "GET") {
       const folder = req.query.folder;
       const filter = folder
@@ -31,11 +38,7 @@ export default async function handler(req, res) {
       const url = "https://api.notion.com/v1/databases/" + DATABASE_ID + "/query";
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          Authorization: "Bearer " + NOTION_API_KEY,
-          "Notion-Version": "2022-06-28",
-          "Content-Type": "application/json",
-        },
+        headers: HEADERS,
         body: JSON.stringify(body),
       });
 
@@ -49,25 +52,67 @@ export default async function handler(req, res) {
         id: page.id,
         memo: page.properties["メモ"]?.title?.[0]?.plain_text || "",
         folder: page.properties["フォルダ"]?.select?.name || "",
+        done: page.properties["完了"]?.checkbox || false,
         created: page.created_time,
       }));
       return res.status(200).json(memos);
     }
 
+    // POST: メモを追加
     if (req.method === "POST") {
       const { memo, folder } = req.body;
       const response = await fetch("https://api.notion.com/v1/pages", {
         method: "POST",
-        headers: {
-          Authorization: "Bearer " + NOTION_API_KEY,
-          "Notion-Version": "2022-06-28",
-          "Content-Type": "application/json",
-        },
+        headers: HEADERS,
         body: JSON.stringify({
           parent: { database_id: DATABASE_ID },
           properties: {
             メモ: { title: [{ text: { content: memo } }] },
             フォルダ: { select: { name: folder } },
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return res.status(response.status).json({ notionError: data });
+      }
+
+      return res.status(200).json(data);
+    }
+
+    // PATCH: フォルダ移動
+    if (req.method === "PATCH") {
+      const { id, folder } = req.body;
+      const response = await fetch("https://api.notion.com/v1/pages/" + id, {
+        method: "PATCH",
+        headers: HEADERS,
+        body: JSON.stringify({
+          properties: {
+            フォルダ: { select: { name: folder } },
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return res.status(response.status).json({ notionError: data });
+      }
+
+      return res.status(200).json(data);
+    }
+
+    // PUT: チェックボックス切り替え
+    if (req.method === "PUT") {
+      const { id, done } = req.body;
+      const response = await fetch("https://api.notion.com/v1/pages/" + id, {
+        method: "PATCH",
+        headers: HEADERS,
+        body: JSON.stringify({
+          properties: {
+            完了: { checkbox: done },
           },
         }),
       });
