@@ -17,24 +17,34 @@
     </div>
     <div class="main-area">
       <div class="sidebar">
-        <div class="folder-icon" data-folder="IDEA" draggable="false">
-          <div class="folder-color" style="background:#e8b4b8;"></div>
+        <div class="folder-icon" data-folder="IDEA">
+          <svg viewBox="0 0 40 32" class="folder-svg folder-c1">
+            <path d="M2 6 C2 4, 4 2, 6 2 L14 2 L18 6 L34 6 C36 6, 38 8, 38 10 L38 26 C38 28, 36 30, 34 30 L6 30 C4 30, 2 28, 2 26 Z"/>
+          </svg>
           <span>IDEA</span>
         </div>
-        <div class="folder-icon" data-folder="MEMO" draggable="false">
-          <div class="folder-color" style="background:#b8b4e8;"></div>
+        <div class="folder-icon" data-folder="MEMO">
+          <svg viewBox="0 0 40 32" class="folder-svg folder-c2">
+            <path d="M2 6 C2 4, 4 2, 6 2 L14 2 L18 6 L34 6 C36 6, 38 8, 38 10 L38 26 C38 28, 36 30, 34 30 L6 30 C4 30, 2 28, 2 26 Z"/>
+          </svg>
           <span>MEMO</span>
         </div>
-        <div class="folder-icon" data-folder="TO DO" draggable="false">
-          <div class="folder-color" style="background:#b4d8e8;"></div>
+        <div class="folder-icon" data-folder="TO DO">
+          <svg viewBox="0 0 40 32" class="folder-svg folder-c3">
+            <path d="M2 6 C2 4, 4 2, 6 2 L14 2 L18 6 L34 6 C36 6, 38 8, 38 10 L38 26 C38 28, 36 30, 34 30 L6 30 C4 30, 2 28, 2 26 Z"/>
+          </svg>
           <span>TO DO</span>
         </div>
-        <div class="folder-icon" data-folder="SCHEDULE" draggable="false">
-          <div class="folder-color" style="background:#c8c8c8;"></div>
+        <div class="folder-icon" data-folder="SCHEDULE">
+          <svg viewBox="0 0 40 32" class="folder-svg folder-c4">
+            <path d="M2 6 C2 4, 4 2, 6 2 L14 2 L18 6 L34 6 C36 6, 38 8, 38 10 L38 26 C38 28, 36 30, 34 30 L6 30 C4 30, 2 28, 2 26 Z"/>
+          </svg>
           <span>SCHEDULE</span>
         </div>
-        <div class="folder-icon folder-archive" data-folder="ARCHIVE" draggable="false">
-          <div class="folder-color" style="background:#999;"></div>
+        <div class="folder-icon folder-archive" data-folder="ARCHIVE">
+          <svg viewBox="0 0 40 32" class="folder-svg folder-c5">
+            <path d="M2 6 C2 4, 4 2, 6 2 L14 2 L18 6 L34 6 C36 6, 38 8, 38 10 L38 26 C38 28, 36 30, 34 30 L6 30 C4 30, 2 28, 2 26 Z"/>
+          </svg>
           <span>🗑️</span>
         </div>
       </div>
@@ -47,7 +57,13 @@
         <option value="TO DO">TO DO</option>
         <option value="SCHEDULE">SCHEDULE</option>
       </select>
-      <input type="text" id="memoInput" placeholder="memo">
+      <div class="input-wrap">
+        <div class="format-btns">
+          <button class="fmt-btn" id="btnCheckbox" title="チェックボックス">☐</button>
+          <button class="fmt-btn" id="btnBullet" title="箇条書き">•</button>
+        </div>
+        <textarea id="memoInput" placeholder="memo" rows="1"></textarea>
+      </div>
       <button id="sendBtn">SEND</button>
     </div>
   </div>
