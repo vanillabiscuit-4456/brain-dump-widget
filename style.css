@@ -22,6 +22,7 @@ body {
   border-radius: 0;
   overflow: hidden;
   border: none;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* === タブ === */
@@ -222,12 +223,14 @@ body {
 
 /* === 入力エリア（2段構成） === */
 .input-area {
-  padding: 8px 12px 10px;
+  padding: 8px 12px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
   background: #fff;
   border-top: 1px solid #e8e8e8;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 /* 上段：フォルダ選択 + 書式ボタン */
