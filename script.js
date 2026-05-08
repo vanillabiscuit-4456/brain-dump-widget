@@ -11,10 +11,15 @@ document.querySelectorAll(".tab").forEach((tab) => {
   });
 });
 
-// メモ送信
+// メモ送信（SENDボタンのみ）
 document.getElementById("sendBtn").addEventListener("click", sendMemo);
+
+// Enterキーでも送信（ただしIME変換中は無視）
 document.getElementById("memoInput").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendMemo();
+  if (e.key === "Enter" && !e.isComposing) {
+    e.preventDefault();
+    sendMemo();
+  }
 });
 
 async function sendMemo() {
@@ -23,6 +28,7 @@ async function sendMemo() {
   const memo = input.value.trim();
   if (!memo) return;
 
+  // 先に入力欄をクリア
   input.value = "";
   document.getElementById("sendBtn").disabled = true;
 
@@ -37,6 +43,7 @@ async function sendMemo() {
     console.error("送信エラー:", err);
   } finally {
     document.getElementById("sendBtn").disabled = false;
+    input.focus();
   }
 }
 
@@ -46,7 +53,7 @@ async function loadMemos() {
   list.innerHTML = "<div style='text-align:center;color:#aaa;padding:20px;'>読み込み中...</div>";
 
   try {
-    const params = currentFolder ? `?folder=${encodeURIComponent(currentFolder)}` : "";
+    const params = currentFolder ? "?folder=" + encodeURIComponent(currentFolder) : "";
     const res = await fetch(API_URL + params);
     const memos = await res.json();
 
@@ -64,11 +71,11 @@ async function loadMemos() {
           hour: "2-digit",
           minute: "2-digit",
         });
-        return `<div class="memo-item">
-          <div class="memo-folder">${m.folder}</div>
-          <div>${m.memo}</div>
-          <div class="memo-time">${time}</div>
-        </div>`;
+        return '<div class="memo-item">' +
+          '<div class="memo-folder">' + m.folder + '</div>' +
+          '<div>' + m.memo + '</div>' +
+          '<div class="memo-time">' + time + '</div>' +
+          '</div>';
       })
       .join("");
 
