@@ -53,17 +53,21 @@
       <div class="memo-list" id="memoList"></div>
     </div>
     <div class="input-area">
-      <select id="folderSelect">
-        <option value="IDEA">IDEA</option>
-        <option value="MEMO">MEMO</option>
-        <option value="TO DO">TO DO</option>
-        <option value="SCHEDULE">SCHEDULE</option>
-      </select>
-      <textarea id="memoInput" placeholder="memo" rows="1"></textarea>
-      <button class="fmt-btn" id="btnCheckbox" title="チェックボックス">☐</button>
-      <button class="fmt-btn" id="btnBullet" title="箇条書き">•</button>
-      <button id="sendBtn">SEND</button>
-    </div>
+  <div class="input-toolbar">
+    <select id="folderSelect">
+      <option value="IDEA">IDEA</option>
+      <option value="MEMO">MEMO</option>
+      <option value="TO DO">TO DO</option>
+      <option value="SCHEDULE">SCHEDULE</option>
+    </select>
+    <button class="fmt-btn" id="btnCheckbox" title="チェックボックス">☐</button>
+    <button class="fmt-btn" id="btnBullet" title="箇条書き">•</button>
+  </div>
+  <div class="input-row">
+    <textarea id="memoInput" placeholder="memo" rows="1"></textarea>
+    <button id="sendBtn">SEND</button>
+  </div>
+</div>
   </div>
   <script src="script.js"></script>
 </body>
