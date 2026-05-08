@@ -14,7 +14,7 @@ document.querySelectorAll(".tab").forEach((tab) => {
 // メモ送信（SENDボタンのみ）
 document.getElementById("sendBtn").addEventListener("click", sendMemo);
 
-// Enterキーでも送信（ただしIME変換中は無視）
+// Enterキーでも送信（IME変換中は無視）
 document.getElementById("memoInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.isComposing) {
     e.preventDefault();
@@ -28,7 +28,6 @@ async function sendMemo() {
   const memo = input.value.trim();
   if (!memo) return;
 
-  // 先に入力欄をクリア
   input.value = "";
   document.getElementById("sendBtn").disabled = true;
 
@@ -62,7 +61,10 @@ async function loadMemos() {
       return;
     }
 
-    list.innerHTML = memos
+    // 古い順に並べる（LINEと同じ：最新が一番下）
+    const sorted = memos.reverse();
+
+    list.innerHTML = sorted
       .map((m) => {
         const date = new Date(m.created);
         const time = date.toLocaleString("ja-JP", {
@@ -79,6 +81,7 @@ async function loadMemos() {
       })
       .join("");
 
+    // 自動で一番下にスクロール
     list.scrollTop = list.scrollHeight;
   } catch (err) {
     list.innerHTML = "<div style='text-align:center;color:#aaa;padding:20px;'>読み込みエラー</div>";
