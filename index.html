@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Dump</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="widget">
+    <div class="tabs">
+      <button class="tab active" data-folder="">ALL</button>
+      <button class="tab" data-folder="IDEA">IDEA</button>
+      <button class="tab" data-folder="MEMO">MEMO</button>
+      <button class="tab" data-folder="TO DO">TO DO</button>
+      <button class="tab" data-folder="BRAND">BRAND</button>
+    </div>
+    <div class="memo-list" id="memoList"></div>
+    <div class="input-area">
+      <select id="folderSelect">
+        <option value="IDEA">IDEA</option>
+        <option value="MEMO">MEMO</option>
+        <option value="TO DO">TO DO</option>
+        <option value="BRAND">BRAND</option>
+      </select>
+      <input type="text" id="memoInput" placeholder="memo">
+      <button id="sendBtn">SEND</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
