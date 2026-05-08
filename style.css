@@ -10,19 +10,28 @@ body {
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  margin: 0;
 }
 
 .widget {
   max-width: 520px;
-  height: 100vh;
-  height: 100dvh;
+  height: 500px;
   display: flex;
   flex-direction: column;
   background: #f7f7f7;
-  border-radius: 0;
+  border-radius: 16px;
   overflow: hidden;
-  border: none;
-  padding-bottom: env(safe-area-inset-bottom);
+  border: 1px solid #e2e2e2;
+}
+
+@media (max-width: 600px) {
+  .widget {
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
 }
 
 /* === タブ === */
