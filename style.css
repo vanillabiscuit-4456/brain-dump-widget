@@ -7,10 +7,13 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: transparent;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
   margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  height: 100%;
 }
 
 .widget {
@@ -25,6 +28,10 @@ body {
 }
 
 @media (max-width: 600px) {
+  html, body {
+    height: 100vh;
+    height: 100dvh;
+  }
   .widget {
     max-width: 100%;
     height: 100vh;
