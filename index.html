@@ -15,7 +15,31 @@
       <button class="tab" data-folder="TO DO">TO DO</button>
       <button class="tab" data-folder="SCHEDULE">SCHEDULE</button>
     </div>
-    <div class="memo-list" id="memoList"></div>
+    <div class="main-area">
+      <div class="sidebar">
+        <div class="folder-icon" data-folder="IDEA" draggable="false">
+          <div class="folder-color" style="background:#e8b4b8;"></div>
+          <span>IDEA</span>
+        </div>
+        <div class="folder-icon" data-folder="MEMO" draggable="false">
+          <div class="folder-color" style="background:#b8b4e8;"></div>
+          <span>MEMO</span>
+        </div>
+        <div class="folder-icon" data-folder="TO DO" draggable="false">
+          <div class="folder-color" style="background:#b4d8e8;"></div>
+          <span>TO DO</span>
+        </div>
+        <div class="folder-icon" data-folder="SCHEDULE" draggable="false">
+          <div class="folder-color" style="background:#c8c8c8;"></div>
+          <span>SCHEDULE</span>
+        </div>
+        <div class="folder-icon folder-archive" data-folder="ARCHIVE" draggable="false">
+          <div class="folder-color" style="background:#999;"></div>
+          <span>🗑️</span>
+        </div>
+      </div>
+      <div class="memo-list" id="memoList"></div>
+    </div>
     <div class="input-area">
       <select id="folderSelect">
         <option value="IDEA">IDEA</option>
