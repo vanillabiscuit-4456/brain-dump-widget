@@ -1,7 +1,6 @@
 const API_URL = "/api/memo";
 let currentFolder = "";
 
-// フォルダ名 → CSSクラス
 function folderClass(folder) {
   const map = {
     "IDEA": "folder-idea",
@@ -13,26 +12,21 @@ function folderClass(folder) {
   return map[folder] || "";
 }
 
-// メモテキストをHTMLに変換（チェックボックス・箇条書き対応）
 function renderMemoContent(text, memoId) {
   return text.split("\n").map((line, i) => {
-    // チェックボックス（チェック済み）
     if (line.startsWith("[x] ")) {
       return '<div class="memo-line-check checked">' +
         '<input type="checkbox" checked data-memo-id="' + memoId + '" data-line="' + i + '">' +
         '<span>' + escapeHtml(line.slice(4)) + '</span></div>';
     }
-    // チェックボックス（未チェック）
     if (line.startsWith("[] ")) {
       return '<div class="memo-line-check">' +
         '<input type="checkbox" data-memo-id="' + memoId + '" data-line="' + i + '">' +
         '<span>' + escapeHtml(line.slice(3)) + '</span></div>';
     }
-    // 箇条書き
     if (line.startsWith("- ") || line.startsWith("• ")) {
       return '<div class="memo-line-bullet"><span>' + escapeHtml(line.slice(2)) + '</span></div>';
     }
-    // 通常テキスト
     if (line.trim() === "") return "";
     return '<div class="memo-line-text">' + escapeHtml(line) + '</div>';
   }).join("");
@@ -74,7 +68,7 @@ document.querySelectorAll(".folder-icon").forEach((folder) => {
     loadMemos();
   });
 
-  // ドロップ先
+  // PC: ドロップ先
   folder.addEventListener("dragover", (e) => {
     e.preventDefault();
     folder.classList.add("drag-over");
@@ -101,7 +95,6 @@ document.getElementById("btnCheckbox").addEventListener("click", () => {
   const val = input.value;
   const before = val.substring(0, pos);
   const after = val.substring(pos);
-  const lineStart = before.lastIndexOf("\n") + 1;
   const prefix = pos === 0 || before.endsWith("\n") ? "[] " : "\n[] ";
   input.value = before + prefix + after;
   input.focus();
@@ -180,7 +173,50 @@ async function updateMemoFolder(memoId, newFolder) {
   }
 }
 
-// === チェックボックス切り替え（メモ内テキスト更新） ===
+// === 長押しでフォルダ移動メニュー（スマホ対応） ===
+function showMoveMenu(memoId, currentMemoFolder) {
+  // 既存メニューがあれば削除
+  const old = document.getElementById("moveMenu");
+  if (old) old.remove();
+
+  const folders = ["IDEA", "MEMO", "TO DO", "SCHEDULE", "ARCHIVE"];
+  const menu = document.createElement("div");
+  menu.id = "moveMenu";
+  menu.className = "move-menu";
+  menu.innerHTML = '<div class="move-menu-title">移動先を選択</div>' +
+    folders.map((f) => {
+      const active = f === currentMemoFolder ? " active" : "";
+      return '<button class="move-menu-btn' + active + '" data-folder="' + f + '">' +
+        (f === "ARCHIVE" ? "🗑️ ARCHIVE" : f) + '</button>';
+    }).join("") +
+    '<button class="move-menu-cancel">キャンセル</button>';
+
+  document.body.appendChild(menu);
+
+  // フォルダ選択
+  menu.querySelectorAll(".move-menu-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const targetFolder = btn.dataset.folder;
+      if (targetFolder !== currentMemoFolder) {
+        await updateMemoFolder(memoId, targetFolder);
+        await loadMemos();
+      }
+      menu.remove();
+    });
+  });
+
+  // キャンセル
+  menu.querySelector(".move-menu-cancel").addEventListener("click", () => {
+    menu.remove();
+  });
+
+  // 背景タップで閉じる
+  menu.addEventListener("click", (e) => {
+    if (e.target === menu) menu.remove();
+  });
+}
+
+// === チェックボックス切り替え ===
 async function toggleCheckInMemo(memoId, lineIndex) {
   try {
     const res = await fetch(API_URL + "?single=" + memoId);
@@ -239,7 +275,7 @@ async function loadMemos() {
         const cssClass = folderClass(m.folder);
         const content = renderMemoContent(m.memo, m.id);
 
-        return '<div class="memo-item ' + cssClass + '" draggable="true" data-id="' + m.id + '">' +
+        return '<div class="memo-item ' + cssClass + '" draggable="true" data-id="' + m.id + '" data-folder="' + m.folder + '">' +
           '<div class="memo-folder">' + m.folder + '</div>' +
           '<div class="memo-content">' + content + '</div>' +
           '<div class="memo-time">' + time + '</div>' +
@@ -247,7 +283,7 @@ async function loadMemos() {
       })
       .join("");
 
-    // ドラッグイベント
+    // PC: ドラッグ
     list.querySelectorAll(".memo-item").forEach((item) => {
       item.addEventListener("dragstart", (e) => {
         e.dataTransfer.setData("text/plain", item.dataset.id);
@@ -256,9 +292,23 @@ async function loadMemos() {
       item.addEventListener("dragend", () => {
         item.classList.remove("dragging");
       });
+
+      // スマホ: 長押し
+      let pressTimer;
+      item.addEventListener("touchstart", (e) => {
+        pressTimer = setTimeout(() => {
+          showMoveMenu(item.dataset.id, item.dataset.folder);
+        }, 500);
+      });
+      item.addEventListener("touchend", () => {
+        clearTimeout(pressTimer);
+      });
+      item.addEventListener("touchmove", () => {
+        clearTimeout(pressTimer);
+      });
     });
 
-    // チェックボックスイベント
+    // チェックボックス
     list.querySelectorAll(".memo-line-check input").forEach((cb) => {
       cb.addEventListener("change", () => {
         const memoId = cb.dataset.memoId;
