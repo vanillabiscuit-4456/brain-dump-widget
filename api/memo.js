@@ -21,11 +21,11 @@ export default async function handler(req, res) {
     if (filter) body.filter = filter;
 
     const response = await fetch(
-      `https://api.notion.com/v1/databases/${DATABASE_ID}/query`,
+      "https://api.notion.com/v1/databases/" + DATABASE_ID + "/query",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${NOTION_API_KEY}`,
+          Authorization: "Bearer " + NOTION_API_KEY,
           "Notion-Version": "2022-06-28",
           "Content-Type": "application/json",
         },
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${NOTION_API_KEY}`,
+        Authorization: "Bearer " + NOTION_API_KEY,
         "Notion-Version": "2022-06-28",
         "Content-Type": "application/json",
       },
