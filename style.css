@@ -328,7 +328,7 @@ html, body {
     border: none;
   }
   .input-area {
-    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
   }
 }
 /* === 長押しフォルダ移動メニュー === */
