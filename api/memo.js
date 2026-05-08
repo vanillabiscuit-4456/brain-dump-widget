@@ -104,15 +104,15 @@ export default async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    // PUT: チェックボックス切り替え
+    // PUT: メモテキスト更新（チェックボックス切り替え）
     if (req.method === "PUT") {
-      const { id, done } = req.body;
+      const { id, text } = req.body;
       const response = await fetch("https://api.notion.com/v1/pages/" + id, {
         method: "PATCH",
         headers: HEADERS,
         body: JSON.stringify({
           properties: {
-            完了: { checkbox: done },
+            メモ: { title: [{ text: { content: text } }] },
           },
         }),
       });
